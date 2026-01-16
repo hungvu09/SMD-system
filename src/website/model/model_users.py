@@ -3,7 +3,7 @@ from flask_login import UserMixin
 
 class User(UserMixin):
     def __init__(self, user_id, username, email, phone=None, status='active', faculty_id=None,created_at=None, updated_at=None,role='student', notifications=None):
-        self.id = user_id(primary_key = True)
+        self.id = user_id
         self.username = username
         self.email = email
         self.phone = phone
@@ -12,17 +12,17 @@ class User(UserMixin):
         self.created_at = created_at
         self.updated_at = updated_at
         self.role = role
-        self.noti = notifications.relationship ('Notifications')
+        self.noti = notifications
 
 
     @staticmethod
     def get(user_id):
-        response = supabase.from_('user').select('*').eq('id', user_id).execute()
+        response = supabase.from_('user').select('*').eq('user_id', user_id).execute()
         data = response.data
         if data:
             user_data = data[0]
             return User(
-                user_id=user_data['id'], 
+                user_id=user_data['user_id'], 
                 username=user_data['username'], 
                 email=user_data['email'],
                 phone=user_data['phone'], 
@@ -33,18 +33,12 @@ class User(UserMixin):
                 role=user_data['role'])
         return None
     
-    # Các method bắt buộc
-    @property
-    def is_authenticated(self):
-        return True
+    # Các method
 
     @property
     def is_active(self):
         return self.status == 'active'
 
-    @property
-    def is_anonymous(self):
-        return False
 
     def get_id(self):
         return str(self.id)

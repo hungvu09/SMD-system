@@ -28,7 +28,7 @@ def create_app():
     
 #ket noi supabase va debug ket noi
     from data.supa import supabase
-    print("Supabase connected:", supabase is not None)
+    #print("Supabase connected:", supabase is not None)
 
     from .auth import auth
     from .views import views

@@ -17,17 +17,17 @@ def login():
         auth_service = Authservice()
         result = auth_service.login(email, password)
 
-        if result == 'success':
-            # Lưu user vào đăng nhập
-            
+        if result.get('success'):
             user = User.get(result['user_id'])
-            from flask_login import login_user
-            login_user(user)
-            flash('Đăng nhập thành công!', category='success')
-            return redirect(url_for('views.home'))
+            if user:
+                login_user(user)
+                flash('Đăng nhập thành công!', category='success')
+                return redirect(url_for('views.home'))
+            else:
+                flash('Dữ liệu người dùng không tồn tại!', category='error')
         else:
-            flash(result == 'error', category='error')
-        
+            flash(result.get('message', 'Đăng nhập thất bại!'), category='error')
+
     return render_template('login.html', user=current_user)
 
 

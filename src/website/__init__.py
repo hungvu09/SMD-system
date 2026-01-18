@@ -2,7 +2,7 @@ from urllib import response
 from flask import Flask
 from flask_login import LoginManager
 import os
-from website.model.model_users import User
+from object.entities.model_users import User
 
 from dotenv import load_dotenv
 import os
@@ -35,7 +35,7 @@ def create_app():
     from controllers.user_controller import user_controller
 
 #import cac cau truc du lieu tu model
-    from .model import notifications
+    
 
     #dang ky blueprint
     app.register_blueprint(auth, url_prefix='/')

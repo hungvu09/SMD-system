@@ -2,8 +2,8 @@ from flask import Blueprint, render_template, request, flash, redirect, url_for
 from data.supa import supabase
 from flask_login import login_user, logout_user, login_required, current_user
 from werkzeug.security import generate_password_hash, check_password_hash #Hàm băm mật khẩu
-from .services.auth_service import Authservice
-from website.model.model_users import User
+from services.auth_service import Authservice
+from object.entities.model_users import User
 
 auth = Blueprint('auth', __name__)
 

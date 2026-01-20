@@ -2,6 +2,7 @@ from flask import Blueprint, render_template, redirect, url_for,request, flash
 from flask_login import login_required, current_user
 from data.supa import supabase
 from middleware.role_required import role_required
+from controllers.admin_control import updated_user_role, created_new_user
 
 views = Blueprint('views', __name__)
 
@@ -28,12 +29,12 @@ def student():
 @login_required
 def admin():
     users = supabase.table('user')\
-        .select('user_id', 'username', 'email', 'role', 'status', 'created_at')\
+        .select('user_id', 'username', 'email', 'role', 'status', 'created_at', 'faculty')\
         .neq('role', 'admin')\
         .execute().data
-    return render_template('admin.html', users=users, current_user=current_user)
+    return render_template('_admin/admin.html', users=users, current_user=current_user)
 
-@views.route('/admin/updated_role', methods = ['POST'])
+@views.route('/admin/update_role', methods = ['POST'])
 @login_required
 @role_required('admin')
 
@@ -41,23 +42,28 @@ def update_role():
     user_id = request.form.get('user_id')
     new_role = request.form.get('role')
     
-    if not user_id or not new_role:
-        flash('Thiếu thông tin user hoặc role mới!', category='error')
-        return redirect(url_for('views.admin'))
-    
-    # Cập nhật role
-    response = supabase.table('user')\
-        .update({'role': new_role})\
-        .eq('user_id', user_id)\
-        .execute()
-    
-    if response.data:
-        flash(f'Cập nhật role cho user thành công: {new_role}', category='success')
-    else:
-        flash('Cập nhật thất bại. Vui lòng thử lại.', category='error')
+    success, message = updated_user_role(current_user, user_id, new_role)
+    flash(message, category='success' if success else 'error')
     
     return redirect(url_for('views.admin'))
 
+@views.route('/admin/create_user',methods = ['GET','POST'] )
+@login_required
+@role_required('admin')
+def create_user():
+    if request.method == 'POST':
+        username = request.form.get('username')
+        email = request.form.get('email')
+        password = request.form.get('password')
+        faculty = request.form.get('faculty')
+        role = request.form.get('role')
+        phone = request.form.get('phone')
+
+        success, message = created_new_user(username, email, password, role, phone, faculty)
+        flash(message, 'success' if success else 'error')
+        return redirect(url_for('views.admin'))
+
+    return render_template('_admin/create_user.html', current_user=current_user)
 
 
 

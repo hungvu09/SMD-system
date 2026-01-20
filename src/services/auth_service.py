@@ -3,36 +3,36 @@ from data.supa import supabase
 from flask import flash
 
 class Authservice:
-    def signup(self, username, email, password1, password2, phone=None):
-        if len(username) < 2:
-            return {'error': 'Họ tên phải lớn hơn 1 ký tự.'}
-        if len(email) < 4:
-            return {'error': 'Email phải lớn hơn 3 ký tự.'}
-        if password1 != password2:
-            return {'error': 'Mật khẩu không khớp.'}
-        if len(password1) < 7:
-            return {'error': 'Mật khẩu phải ít nhất 7 ký tự.'}
+    # def signup(self, username, email, password1, password2, phone=None):
+    #     if len(username) < 2:
+    #         return {'error': 'Họ tên phải lớn hơn 1 ký tự.'}
+    #     if len(email) < 4:
+    #         return {'error': 'Email phải lớn hơn 3 ký tự.'}
+    #     if password1 != password2:
+    #         return {'error': 'Mật khẩu không khớp.'}
+    #     if len(password1) < 7:
+    #         return {'error': 'Mật khẩu phải ít nhất 7 ký tự.'}
         
-        try:
-                auth_response = supabase.auth.sign_up({
-                    "email": email,
-                    "password": password1
-                })
-                if auth_response.user:
-                    # Lưu vào bảng public.user với role mặc định 'student'
-                    supabase.from_('user').insert({
-                        "user_id": str(auth_response.user.id),
-                        "username": username,
-                        "email": email,
-                        "phone": phone,
-                        "status": 'active',
-                        "role": 'student'  # Mặc định 'student', admin duyệt sau
-                    }).execute()
-                    flash("Đăng ký thành công! Role mặc định: student.", category='success')
-                else:
-                    flash("Đăng ký thất bại. Vui lòng thử lại.", category='error')
-        except Exception as e:
-                return {"success": False, "message": str(e)}
+    #     try:
+    #             auth_response = supabase.auth.sign_up({
+    #                 "email": email,
+    #                 "password": password1
+    #             })
+    #             if auth_response.user:
+    #                 # Lưu vào bảng public.user với role mặc định 'student'
+    #                 supabase.from_('user').insert({
+    #                     "user_id": str(auth_response.user.id),
+    #                     "username": username,
+    #                     "email": email,
+    #                     "phone": phone,
+    #                     "status": 'active',
+    #                     "role": 'student'  # Mặc định 'student', admin duyệt sau
+    #                 }).execute()
+    #                 flash("Đăng ký thành công! Role mặc định: student.", category='success')
+    #             else:
+    #                 flash("Đăng ký thất bại. Vui lòng thử lại.", category='error')
+    #     except Exception as e:
+    #             return {"success": False, "message": str(e)}
     
 
 

@@ -3,7 +3,7 @@ from data.supa import supabase
 from flask_login import login_user, logout_user, login_required, current_user
 from werkzeug.security import generate_password_hash, check_password_hash #Hàm băm mật khẩu
 from services.auth_service import Authservice
-from object.entities.model_users import User
+from _object.entities.model_users import User
 
 auth = Blueprint('auth', __name__)
 
@@ -47,7 +47,7 @@ def login():
             else:
                 flash('Dữ liệu người dùng không tồn tại!', category='error')
         else:
-            flash(result.get('message', 'Đăng nhập thất bại!'), category='error')
+            flash(result.get('message', 'Sai email hoặc mật khẩu!'), category='error')
 
     return render_template('login.html', user=current_user)
 
@@ -61,20 +61,20 @@ def logout():
 
 
 # Signup route
-@auth.route('/signup', methods=['GET', 'POST'])
-def signup():
+# @auth.route('/signup', methods=['GET', 'POST'])
+# def signup():
 
-    if request.method == 'POST':
-        username = request.form.get('username')
-        email = request.form.get('email')
-        password1 = request.form.get('password1')
-        password2 = request.form.get('password2')
-        phone = request.form.get('phone', None)
+#     if request.method == 'POST':
+#         username = request.form.get('username')
+#         email = request.form.get('email')
+#         password1 = request.form.get('password1')
+#         password2 = request.form.get('password2')
+#         phone = request.form.get('phone', None)
         
-        auth_service = Authservice()
-        result = auth_service.signup(username, email, password1, password2, phone)
+#         auth_service = Authservice()
+#         result = auth_service.signup(username, email, password1, password2, phone)
 
-        if result == 'success':
-           return redirect(url_for('auth.login'))
+#         if result == 'success':
+#            return redirect(url_for('auth.login'))
 
-    return render_template('signup.html', user=current_user)
+#     return render_template('signup.html', user=current_user)

@@ -2,7 +2,7 @@ from urllib import response
 from flask import Flask
 from flask_login import LoginManager
 import os
-from object.entities.model_users import User
+from _object.entities.model_users import User
 
 
 from dotenv import load_dotenv
@@ -41,5 +41,6 @@ def create_app():
     #dang ky blueprint
     app.register_blueprint(auth, url_prefix='/')
     app.register_blueprint(views, url_prefix='/')
+
 
     return app

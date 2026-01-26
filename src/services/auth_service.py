@@ -57,8 +57,8 @@ class Authservice:
                      username = user_data.data['username']
                      status = user_data.data['status']
                      if status != 'active':
-                        flash('Tài khoản của bạn không hoạt động. Vui lòng liên hệ quản trị viên.', category='error')
-                        return {"success": False, "message": "Tài khoản không hoạt động."}
+                        
+                        return {"success": False, "message": "Tài khoản của bạn không hoạt động."}
                      return {   #trả về thông tin user
                             'success': True,
                             'user_id': user_id,

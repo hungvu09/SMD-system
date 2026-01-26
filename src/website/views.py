@@ -2,7 +2,7 @@ from flask import Blueprint, render_template, redirect, url_for,request, flash
 from flask_login import login_required, current_user
 from data.supa import supabase
 from middleware.role_required import role_required
-from controllers.admin_control import updated_user_role, created_new_user
+from controllers.admin_control import updated_user_role, created_new_user, toggle_user_status
 
 views = Blueprint('views', __name__)
 
@@ -28,26 +28,36 @@ def student():
 @views.route('/admin')
 @login_required
 def admin():
+    
+    return render_template('_admin/admin.html',  current_user=current_user)
+
+@views.route('/admin/manager', methods = ['GET','POST'])
+@login_required
+@role_required('admin')
+
+def manager():
     users = supabase.table('user')\
         .select('user_id', 'username', 'email', 'role', 'status', 'created_at', 'faculty')\
         .neq('role', 'admin')\
         .execute().data
-    return render_template('_admin/admin.html', users=users, current_user=current_user)
+    if request.method == 'POST':
+        action = request.form.get('action')
+        user_id = request.form.get('user_id')
 
-@views.route('/admin/update_role', methods = ['POST'])
-@login_required
-@role_required('admin')
 
-def update_role():
-    user_id = request.form.get('user_id')
-    new_role = request.form.get('role')
+        if action == 'update_role':
+            new_role = request.form.get('role')
     
-    success, message = updated_user_role(current_user, user_id, new_role)
-    flash(message, category='success' if success else 'error')
-    
-    return redirect(url_for('views.admin'))
+            success, message = updated_user_role(current_user, user_id, new_role)
+            flash(message, category='success' if success else 'error')
+        elif action =='toggle_status':
+            toggle_user_status(user_id)
+        return redirect(url_for('views.manager'))
+    return render_template('_admin/manager.html',users=users, current_user=current_user)
 
-@views.route('/admin/create_user',methods = ['GET','POST'] )
+
+
+@views.route('/admin/manager/create_user',methods = ['GET','POST'] )
 @login_required
 @role_required('admin')
 def create_user():
@@ -61,7 +71,7 @@ def create_user():
 
         success, message = created_new_user(username, email, password, role, phone, faculty)
         flash(message, 'success' if success else 'error')
-        return redirect(url_for('views.admin'))
+        return redirect(url_for('views.manager'))
 
     return render_template('_admin/create_user.html', current_user=current_user)
 

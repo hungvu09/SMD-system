@@ -1,5 +1,25 @@
-{% extends "base.html" %} {% block title %}LOGIN{% endblock %}
+<!--{% extends "base.html" %} {% block title %}LOGIN{% endblock %}
 {% block content %}
+<style>
+    body {
+        margin: 0;
+        padding: 0;
+     background-image: url("{{url_for('static', filename='img/background_web.png' )}}");
+     
+     background-size: cover;
+     background-position: center;
+     background-repeat: no-repeat;
+     background-attachment: fixed;
+    }
+
+    .main-container {
+        background-color: rgba(255, 255, 255, 0.903); /* Màu trắng mờ 90% */
+        margin: 20px;
+        padding: 20px;
+        border-radius: 10px;
+    }
+ </style>
+
 <form method="POST">
     <h3 align="center">Login</h3>
 
@@ -15,4 +35,4 @@
 <br />
     <button type="submit" class="btn btn-primary">Login</button>
 </form>
-{% endblock %}
+{% endblock %}-->

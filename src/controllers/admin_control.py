@@ -59,4 +59,18 @@ def created_new_user(username, email, password, role, phone, faculty):
           return False, f'Lỗi hệ thống {str(e)}'
     
 
+def toggle_user_status(user_id):
+    # 1. Lấy trạng thái hiện tại của user
+    user_data = supabase.table('user').select('status').eq('user_id', user_id).single().execute().data
+    
+    if user_data:
+        # 2. Đảo trạng thái: Nếu đang active thì thành locked và ngược lại
+        new_status = 'locked' if user_data['status'] == 'active' else 'active'
+        
+        # 3. Cập nhật vào Database
+        supabase.table('user').update({'status': new_status}).eq('user_id', user_id).execute()
+        
+        flash(f"Đã {'khóa' if new_status == 'locked' else 'mở khóa'} tài khoản thành công!", category='success')
+    
+
 

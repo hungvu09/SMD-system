@@ -1,4 +1,41 @@
 {% extends "base.html" %} {% block title %}SMD{% endblock %}
 {% block content %}
-WELCOME TO 
+ <style>
+    body {
+        margin: 0;
+        padding: 0;
+     background-image: url("{{url_for('static', filename='img/background_web.png' )}}");
+     
+     background-size: cover;
+     background-position: center;
+     background-repeat: no-repeat;
+     background-attachment: fixed;
+    }
+
+    .main-container {
+        background-color: rgba(255, 255, 255, 0.7); /* Màu trắng mờ 70% */
+        margin: 20px;
+        padding: 20px;
+        border-radius: 10px;
+    }
+ </style>
+
+ <div class = "main-container">
+    <h2>Xin Chào Bạn</h2>
+    <form method="POST">
+    <h3 align="center">Login</h3>
+
+    <div class="form-group">
+        <label for="email">Email</label>
+        <input type="email" class="form-control" id="email" name="email" placeholder="Enter Email">
+    </div>
+
+    <div class="form-group">
+        <label for="password">Password</label>
+        <input type="password" class="form-control" id="password" name="password" required placeholder="Enter Password">
+    </div>
+    <br />
+    <button type="submit" class="btn btn-primary">Login</button>
+    </form>
+ </div>
 {% endblock %}

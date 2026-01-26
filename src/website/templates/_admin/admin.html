@@ -1,53 +1,45 @@
-{% extends "base.html" %}
+{% extends "des.html" %}
 {% block title %}Quản lý người dùng{% endblock %}
 {% block content %}
-<h1>Quản Lý Người Dùng</h1>
+<style>
+  body {
+        background-color: rgba(119, 226, 248, 0.4);
+        
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+    }
+</style>
+<h1>Trang chủ Admin</h1>
 <p> Xin chào Admin</p>
-<h3>    Danh sách người dùng</h3>
-{% if users %}
-    <table border="1" cellpadding="10" style="width:100%; border-collapse: collapse;">
-      <thead>
-        <tr>
-          <th>Username</th>
-          <th>Email</th>
-          <th>Khoa</th>
-          <th>Phân quyền hiện tại</th>
-          <th>Phone</th>
-          <th>Status</th>
-          <th>Thao tác</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for user in users %}
-          <tr>
-            <td>{{ user.username or 'N/A' }}</td>
-            <td>{{ user.email }}</td>
-            <td>{{ user.faculty}}</td>
-            <td>{{ user.role | capitalize }}</td>
-            <td>{{ user.phone or 'N/A' }}</td>
-            <td>{{ user.status }}</td>
-            <td>
-              <form action="{{ url_for('views.update_role') }}" method="POST" style="display:inline;">
-            
-                <input type="hidden" name="user_id" value="{{ user.user_id }}">
-                <select name="role">
-                  <option value="student" {% if user.role == 'student' %}selected{% endif %}>Student</option>
-                  <option value="lecturer" {% if user.role == 'lecturer' %}selected{% endif %}>Lecturer</option>
-                  <option value="hod" {% if user.role == 'hod' %}selected{% endif %}>HoD</option>
-                  <option value="rector" {% if user.role == 'rector' %}selected{% endif %}>Rector</option>
-                </select>
-                <button type="submit">Cập nhật</button>
-              </form>
-            </td>
-          </tr>
-        {% endfor %}
-      </tbody>
-    </table>
-  {% else %}
-    <p>Chưa có người dùng nào khác ngoài admin.</p>
-  {% endif %}
+<div class="dashboard-grid">
+    <a href="{{ url_for('views.manager') }}" class="card-item">
+        <div class="icon-box">
+            <i class="fa-solid fa-user-gear"></i> </div>
+        <h3>Quản lí người dùng</h3>
+    </a>
+
+    <a href="#" class="card-item">
+        <div class="icon-box">
+            <i class="fa-solid fa-gear"></i> </div>
+        <h3>Cấu hình hệ thống</h3>
+    </a>
+
+    <a href="#" class="card-item">
+        <div class="icon-box">
+            <i class="fa-solid fa-file-lines"></i> </div>
+        <h3>Quản lí xuất bản</h3>
+    </a>
+
+    
+    
+     </div>
   
   <br>
-  <a href="{{ url_for('views.create_user') }}" class="btn btn-primary">Tạo User Mới</a>
-  <a href="{{ url_for('auth.logout') }}"class="btn btn-primary">Đăng xuất</a>
+  <div style="margin-top: 20px;">
+        <a href="{{ url_for('auth.logout') }}" class="btn btn-danger" style="background: #e74c3c; border: none; padding: 10px 20px; border-radius: 5px; text-decoration: none; color: white; margin-left: 10px;">
+            Đăng xuất
+        </a>
+  </div>
 {% endblock %}

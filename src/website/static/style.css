@@ -1,0 +1,117 @@
+/* 1. Tạo cái lưới (Grid) để xếp các ô đều nhau */
+.dashboard-grid {
+    display: grid;
+    /* Dòng này cực hay: Tự động chia cột, mỗi cột tối thiểu 150px, còn lại tự giãn */
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); 
+    gap: 20px; /* Khoảng cách giữa các ô */
+    padding: 20px;
+    max-width: 1200px;
+    margin: 0 auto; /* Căn giữa màn hình */
+}
+
+/* 2. Trang trí từng cái ô (Card) */
+.card-item {
+    background-color: white; /* Nền trắng */
+    border-radius: 20px;     /* Bo tròn góc như trong ảnh của bạn */
+    padding: 30px 20px;
+    text-align: center;      /* Căn giữa nội dung */
+    text-decoration: none;   /* Bỏ gạch chân của thẻ a */
+    color: #333;             /* Màu chữ đen xám */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); /* Đổ bóng nhẹ cho nổi lên */
+    transition: transform 0.3s ease, box-shadow 0.3s ease; /* Hiệu ứng mượt */
+    
+    /* Flex để căn giữa icon và chữ theo chiều dọc */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 200px; /* Chiều cao cố định cho đẹp */
+}
+
+/* 3. Hiệu ứng khi di chuột vào */
+.card-item:hover {
+    transform: translateY(-10px); /* Nhấc ô lên một chút */
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2); /* Bóng đậm hơn */
+    border: 2px solid #008080; /* Viền màu xanh Teal khi hover */
+}
+
+/* 4. Trang trí cái Icon */
+.icon-box {
+    font-size: 50px; /* Kích thước icon */
+    color: #008080;  /* Màu xanh Teal (giống ảnh của bạn) */
+    margin-bottom: 15px;
+}
+
+/* 5. Trang trí tiêu đề */
+.card-item h3 {
+    font-size: 16px;
+    font-weight: 600;
+    margin: 0;
+    color: #555;
+}
+
+/* Container bao quanh bảng để tạo khoảng cách */
+.table-container {
+    background: rgba(255, 255, 255, 0.9); /* Trắng mờ 90% để nổi trên nền xanh */
+    padding: 25px;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    margin: 20px;
+}
+
+/* Trang trí bảng */
+.custom-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0 10px; /* Tạo khoảng cách giữa các hàng */
+}
+
+.custom-table th {
+    background-color: #008080; /* Màu xanh Teal đồng bộ logo UTH */
+    color: white;
+    padding: 15px;
+    text-transform: uppercase;
+    font-size: 14px;
+    letter-spacing: 1px;
+}
+
+/* Bo tròn góc cho th đầu và cuối */
+.custom-table th:first-child { border-radius: 10px 0 0 10px; }
+.custom-table th:last-child { border-radius: 0 10px 10px 0; }
+
+.custom-table td {
+    background: white;
+    padding: 15px;
+    border-top: 1px solid #eee;
+    border-bottom: 1px solid #eee;
+}
+
+/* Hiệu ứng khi di chuột qua hàng */
+.custom-table tr:hover td {
+    background-color: #f0fdfa; /* Xanh cực nhạt */
+    transform: scale(1.01);
+    transition: 0.2s;
+}
+
+/* Trang trí các nút và Select */
+.btn-update {
+    background: #008080;
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.select-role {
+    padding: 8px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+.main-container {
+        background-color: rgba(255, 255, 255, 0.7); /* Màu trắng mờ 70% */
+        margin: 20px;
+        padding: 20px;
+        border-radius: 10px;
+    }

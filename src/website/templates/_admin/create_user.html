@@ -1,9 +1,18 @@
-{% extends "base.html" %}
+{% extends "des.html" %}
 {% block title %}Tạo người dùng mới {% endblock %}
 {% block content %}
-
+<style>
+  body {
+        background-color: rgba(119, 226, 248, 0.4);
+        
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+    }
+</style>
 <form action ="{{ url_for('views.create_user') }}" method = 'POST'>
-
+<div class ='main-container'>
     <div class="form-group">
         <label for="username">Username</label>
         <input type="text" class="form-control" id="username" name="username" required placeholder="Nhập Username">
@@ -36,16 +45,20 @@
     <div class="form-group">
         <label for="role">Vai trò</label>
         <select id="role" name="role">
-            <option value="student">Student</option>
-            <option value="lecturer">Lecturer</option>
-            <option value="hod">HoD (Trưởng Khoa)</option>
+            <option value="student">Sinh Viên</option>
+            <option value="lecturer">Giảng VIên</option>
+            <option value="hod">Trưởng Khoa</option>
             <option value="approval">Người Phê Duyệt</option>
+            <option value="rector">Hiệu Trưởng</option>
             
         </select>
     </div>
 
     <br />
-    <button type="submit" class="btn btn-primary">Hoàn Tất</button><br>
-</form><br>
-<a href="{{ url_for('views.admin') }}">Quay lại</a>
+    <button type="submit" class="btn-update">Hoàn Tất</button><br>
+</div>
+</form>
+
+<br>
+<a href="{{ url_for('views.manager') }}" class = "btn btn-primary">Quay lại</a>
 {% endblock %}

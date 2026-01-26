@@ -9,8 +9,8 @@ auth = Blueprint('auth', __name__)
 
 
 # Login route
-@auth.route('/login', methods=['GET', 'POST'])
-def login():
+@auth.route('/', methods=['GET', 'POST'])
+def home():
     if request.method == 'POST':
         email = request.form.get('email')
         password = request.form.get('password')
@@ -49,7 +49,7 @@ def login():
         else:
             flash(result.get('message', 'Sai email hoặc mật khẩu!'), category='error')
 
-    return render_template('login.html', user=current_user)
+    return render_template('home.html', user=current_user)
 
 
 # Logout route
@@ -57,7 +57,7 @@ def login():
 def logout():
     supabase.auth.sign_out()
     flash('Đăng xuất thành công!', category='success')
-    return redirect(url_for('auth.login'))
+    return redirect(url_for('auth.home'))
 
 
 # Signup route

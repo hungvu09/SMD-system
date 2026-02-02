@@ -2,7 +2,9 @@ from flask import Blueprint, render_template, redirect, url_for,request, flash
 from flask_login import login_required, current_user
 from data.supa import supabase
 from middleware.role_required import role_required
-from controllers.admin_control import updated_user_role, created_new_user, toggle_user_status, admin_publish_management
+from controllers.admin_control import system_config_up, updated_user_role, created_new_user, toggle_user_status, admin_publish_management
+from services.notification_ser import NotificationService
+
 
 views = Blueprint('views', __name__)
 
@@ -84,17 +86,33 @@ def publish_a():
         syllabus_id = request.form.get('syllabus_id')
         action = request.form.get('action')
 
-        admin_publish_management(syllabus_id, action)
+        success = admin_publish_management(syllabus_id, action)
+        if success:
+            flash('Cập nhật trạng thái giáo trình thành công!', category='success')
+        else:
+            flash('Cập nhật trạng thái giáo trình thất bại!', category='error')
         return redirect(url_for('views.publish_a'))
 
     pending_list = supabase.table('syllabus').select('*').eq('status', 'pending').execute().data
     return render_template('_admin/publish_a.html', documents=pending_list, user=current_user)
 
+@views.route('/admin/system_config', methods = ['GET','POST'])
+@login_required
+@role_required('admin')
+def system_config():
+    if request.method == 'POST':
+        semester = request.form.get('semester')
+        static_inf = request.form.get('static_inf')
+        score_scale = request.form.get('score_scale')
+        clo_plo_template = request.form.get('clo_plo_template')
+        id_settings = request.form.get('id_settings')
 
+        success,message = system_config_up(semester, static_inf, score_scale, clo_plo_template, id_settings)
+        flash(message, category='success' if success else 'error')
+        return redirect(url_for('views.system_config'))
 
-
-
-
+    config = supabase.table('system_settings').select('*').execute().data
+    return render_template('_admin/system_config.html', config=config, current_user=current_user)
 
 
 
@@ -125,10 +143,28 @@ def academic():
 
 
 
-#RECTOR AND HOD
-@views.route('/approval')
+#rector
+@views.route('/rector')
 @login_required
-def approval():
+def rector():
     response = supabase.from_('user').select('*').execute()
     users = response.data or []
-    return render_template('approval.html', users=users)
+    return render_template('rector.html', users=users)
+
+
+#rector
+@views.route('/hod')
+@login_required
+def hod():
+    response = supabase.from_('user').select('*').execute()
+    users = response.data or []
+    return render_template('hod.html', users=users)
+
+
+
+@views.route('/notifications')
+@login_required
+def all_notifications():
+    # lấy thông báo 
+    notifications = NotificationService.get_personal_notifications(current_user.id)
+    return render_template('notifications_all.html', notifications=notifications, user=current_user)

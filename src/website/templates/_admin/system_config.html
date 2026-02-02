@@ -1,0 +1,179 @@
+{% extends "des.html" %}
+{% block content %}
+<style>
+    body {
+        background-color: rgba(119, 226, 248, 0.4);
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+    }
+    /* Thêm chút style cho bảng đẹp hơn */
+    .custom-table th, .custom-table td {
+        text-align: center;
+        vertical-align: middle;
+    }
+</style>
+
+<div class="table-container" style="max-width: 800px; margin: 50px auto; background: white; padding: 20px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+    <h3 style="color: #008080;"><i class="fa-solid fa-sliders"></i> Cấu hình hệ thống</h3>
+    <p style="font-size: 0.9rem; color: #666;">Thiết lập các tham số nền tảng và học thuật</p>
+
+    <form action="" method="POST" style="margin-top: 20px;">
+        <div style="margin-bottom: 15px;">
+            <label style="font-weight: bold;">Học kỳ hiện tại:</label>
+            <input type="text" name="semester" value="{{ config.semester }}" class="select-role" style="width: 100%; margin-top: 5px; padding: 8px;" placeholder="Ví dụ: 2025-2026">
+        </div>
+        
+        <div class="table-container" style="margin-top: 20px; overflow-x: auto;">
+            <label style="font-weight: bold; color: #008080;"><i class="fa-solid fa-table-cells"></i> Mẫu CLO/PLO:</label>
+    
+            <table id="matrixTable" class="table table-bordered custom-table" style="margin-top: 10px; width: 100%;">
+                <thead style="background-color: #f8f9fa;">
+                    <tr id="headerRow">
+                        <th style="min-width: 150px;">Học phần</th>
+                        <th class="plo-header">PLO1</th>
+                        <th class="plo-header">PLO2</th>
+                        <th style="width: 80px;">
+                            <button type="button" class="btn btn-sm btn-success" onclick="addColumn()">+ PLO</button>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody id="tableBody">
+                    </tbody>
+            </table>
+    
+            <button type="button" class="btn btn-secondary btn-sm" style="margin-top: 10px;" onclick="addRow()">
+                <i class="fa-solid fa-plus"></i> Thêm Học phần
+            </button>
+        </div>
+
+        <input type="hidden" name="clo_plo_template" id="clo_plo_json">
+
+        <div style="margin-bottom: 15px; margin-top: 20px;">
+            <label style="font-weight: bold;">Thang điểm hệ thống:</label>
+            <select name="score_scale" class="select-role" style="width: 100%; margin-top: 5px; padding: 8px;">
+                <option value="4" {% if config.score_scale == 4 %}selected{% endif %}>Thang điểm 4</option>
+                <option value="10" {% if config.score_scale == 10 %}selected{% endif %}>Thang điểm 10</option>
+            </select>
+        </div>
+
+        <div style="margin-bottom: 20px;">
+            <label style="font-weight: bold;">Thông tin thông báo chung:</label>
+            <textarea name="static_inf" class="select-role" style="width: 100%; height: 100px; margin-top: 5px; padding: 8px;">{{ config.static_inf }}</textarea>
+        </div>
+
+        <div style="display: flex; gap: 10px;">
+            <button type="submit" class="btn btn-success" style="padding: 10px 30px; font-weight: bold;">
+                <i class="fa-solid fa-floppy-disk"></i> Lưu
+            </button>
+            <a href="{{ url_for('views.admin') }}" class="btn btn-primary" style="padding: 10px 30px;">Quay lại</a> 
+        </div>
+    </form>
+</div>
+
+<script>
+    // Hàm thêm Cột PLO mới
+    function addColumn() {
+        console.log("Đang thêm cột...");
+        const headerRow = document.getElementById('headerRow');
+        // Đếm số lượng class 'plo-header' để biết đang có bao nhiêu PLO
+        const currentPloCount = document.querySelectorAll('.plo-header').length;
+        const newPloIndex = currentPloCount + 1;
+
+        // 1. Thêm tiêu đề cột (TH)
+        const newTh = document.createElement('th');
+        newTh.className = 'plo-header'; // Gán class để lần sau đếm tiếp
+        newTh.innerText = `PLO${newPloIndex}`;
+        
+        // Chèn vào trước ô cuối cùng (là ô chứa nút +PLO)
+        headerRow.insertBefore(newTh, headerRow.lastElementChild);
+
+        // 2. Thêm ô input vào các hàng đang có sẵn
+        const rows = document.getElementById('tableBody').rows;
+        for (let row of rows) {
+            let newCell = row.insertCell(row.cells.length - 1); // Chèn trước ô Xóa
+            newCell.innerHTML = '<input type="text" class="matrix-input" placeholder="-" style="width: 100%; text-align: center;">';
+        }
+    }
+
+    // Hàm thêm Hàng Học phần mới
+    function addRow() {
+        console.log("Đang thêm hàng..."); 
+        const tbody = document.getElementById('tableBody');
+        const headerCount = document.getElementById('headerRow').cells.length; // Tổng số cột (gồm cả cột Tên và cột Nút)
+        const newRow = tbody.insertRow();
+
+        // 1. Tạo ô Tên học phần (Cột 0)
+        let cellName = newRow.insertCell(0);
+        cellName.innerHTML = '<input type="text" placeholder="Tên học phần..." style="width: 100%;">';
+
+        // 2. Tạo các ô input cho PLO (từ cột 1 đến sát cột cuối)
+        // headerCount - 2 có nghĩa là: Tổng - (Cột Tên) - (Cột Nút add PLO)
+        // Nhưng vì ta bắt đầu loop từ 0 (đã insert cellName), nên ta cần loop đủ số lượng PLO
+        const ploCount = document.querySelectorAll('.plo-header').length;
+        
+        for (let i = 0; i < ploCount; i++) {
+            let cellPlo = newRow.insertCell(i + 1);
+            cellPlo.innerHTML = '<input type="text" class="matrix-input" placeholder="-" style="width: 100%; text-align: center;">';
+        }
+
+        // 3. Tạo ô nút Xóa (Cột cuối)
+        let cellAction = newRow.insertCell(ploCount + 1);
+        cellAction.innerHTML = '<button type="button" class="btn btn-danger btn-sm" onclick="removeRow(this)"><i class="fa-solid fa-trash"></i></button>';
+    }
+
+    // Hàm Xóa hàng
+    function removeRow(btn) {
+        if (confirm('Bạn chắc chắn muốn xóa dòng này?')) {
+            const row = btn.parentNode.parentNode;
+            row.parentNode.removeChild(row);
+        }
+    }
+
+    // Xử lý khi bấm LƯU (Submit Form)
+    const form = document.querySelector('form');
+    if (form) {
+        form.addEventListener('submit', function() {
+            let matrixData = [];
+            const rows = document.getElementById('tableBody').rows;
+            const headers = document.querySelectorAll('.plo-header');
+            
+            // Lấy danh sách tên các cột PLO hiện tại (PLO1, PLO2...)
+            let ploNames = [];
+            headers.forEach(th => ploNames.push(th.innerText));
+
+            // Duyệt từng dòng
+            for (let row of rows) {
+                let courseInput = row.cells[0].querySelector('input');
+                if (!courseInput) continue; // Phòng trường hợp lỗi
+                
+                let courseName = courseInput.value;
+                if(courseName.trim() === "") continue; // Bỏ qua dòng trống
+
+                let rowData = {
+                    course: courseName,
+                    plos: {} 
+                };
+
+                // Lấy giá trị từng ô PLO
+                for (let i = 0; i < ploNames.length; i++) {
+                    // Cột input tương ứng là i + 1
+                    let input = row.cells[i+1].querySelector('input');
+                    rowData.plos[ploNames[i]] = input ? input.value : "";
+                }
+                matrixData.push(rowData);
+            }
+            // Gán chuỗi JSON vào input ẩn
+            document.getElementById('clo_plo_json').value = JSON.stringify(matrixData);
+        });
+    }
+
+    // Tự động thêm 1 dòng trống khi mới vào trang cho đẹp
+    document.addEventListener("DOMContentLoaded", function() {
+        if(document.getElementById('tableBody').rows.length === 0) {
+            addRow();
+        }
+    });
+</script>
+{% endblock %}

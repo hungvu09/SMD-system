@@ -60,22 +60,36 @@ def created_new_user(username, email, password, role, phone, faculty):
     
 
 def toggle_user_status(user_id):
-    # 1. Lấy trạng thái hiện tại của user
+    # lấy thong tin của user từ bảng user trên database
     user_data = supabase.table('user').select('status').eq('user_id', user_id).single().execute().data
     
     if user_data:
-        # 2. Đảo trạng thái: Nếu đang active thì thành locked và ngược lại
+        # thay đổi trạng thái khi trỏ vào nút
         new_status = 'locked' if user_data['status'] == 'active' else 'active'
         
-        # 3. Cập nhật vào Database
+        # cập nhật trạng thái mới
         supabase.table('user').update({'status': new_status}).eq('user_id', user_id).execute()
         
         flash(f"Đã {'khóa' if new_status == 'locked' else 'mở khóa'} tài khoản thành công!", category='success')
 
 
 
-def system_config(stem):
-      pass
+def system_config_up(semester, static_inf, score_scale, clo_plo_template,id_settings):
+      try:
+          import json
+          data = {
+              "id_settings": id_settings,
+              "semester": semester,
+              "static_inf": static_inf,
+              "score_scale": score_scale,
+              "clo_plo_template": json.loads(clo_plo_template)
+          }
+          supabase.table('system_settings').upsert(data).eq('id_settings', 1).single().execute()
+          
+          return True,"Cập nhật cấu hình hệ thống thành công!"
+      except Exception as e:
+          
+          return False, f"Lỗi hệ thống: {str(e)}"
 
 
 
@@ -91,7 +105,7 @@ def admin_publish_management(syllabus_id, new_status):
 
         msg = "Đã phê duyệt giáo trình!" if new_status == "approved" else " Đã từ chối giáo trình."
         flash(msg, category='success' if new_status == "approved" else 'warning')
-        return True
+        return True,
     except Exception as e:
         flash(f"Lỗi hệ thống: {str(e)}", category='error')
         return False

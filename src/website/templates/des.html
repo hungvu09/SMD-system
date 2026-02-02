@@ -14,7 +14,41 @@
             <img src="{{ url_for('static', filename='img/logo.png') }}" alt="Logo UTH" class="logo-img" width="240">
         
         </div>
-
+        {% if current_user.is_authenticated and request.endpoint != 'auth.home' %}
+        {% if system_banner %}
+        <div class="system-banner">
+            <marquee behavior="scroll" direction="left">
+             <i class="fa-solid fa-bullhorn"></i> {{ system_banner }}
+            </marquee>
+        </div>
+        {% endif %}
+        
+        <div class="notification-container-right">
+            <button class="notif-bell-btn" id="bellBtn">
+                <i class="fa-solid fa-bell"></i>
+            {% if unread_count > 0 %}
+                <span class="notif-badge">{{ unread_count }}</span>
+            {% endif %}
+            </button>
+    
+            <div class="notif-content-dropdown" id="notifDropdown">
+                <div class="notif-header">
+                    <h4>Thông báo mới</h4>
+                </div>
+                <div class="notif-list">
+                    {% for n in personal_notifications %}
+                        <div class="notif-item">
+                            <strong>{{ n.title }}</strong> <p>{{ n.message }}</p>
+                            <small>{{ n.created_at }}</small>
+                        </div>
+                    {% endfor %}
+                </div>
+                <div class="notif-footer">
+                    <a href="{{ url_for('views.all_notifications') }}">Xem tất cả</a>
+                </div>
+            </div>
+        </div>
+        {% endif %}
 
 
         {% with messages = get_flashed_messages(with_categories=true) %}
@@ -45,6 +79,27 @@
         <script
          type = "text/javascript"
          src = "{{ url_for('static', filename='js/main.js') }}">
+        </script>
+        </div>
+        <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const bellBtn = document.getElementById('bellBtn');
+            const dropdown = document.getElementById('notifDropdown');
+
+        if (bellBtn) {
+            bellBtn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                dropdown.classList.toggle('active');
+        });
+        }
+
+        // Click ra ngoài thì đóng lại
+        document.addEventListener('click', function(e) {
+            if (dropdown && !dropdown.contains(e.target) && e.target !== bellBtn) {
+            dropdown.classList.remove('active');
+            }
+        });
+    });
         </script>
     </body>
 </html>

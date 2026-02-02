@@ -33,11 +33,14 @@ def home():
                 # chuyển hướng đến trang dựa trên vai trò của người dùng
                 if role == 'student':
                     return redirect(url_for('views.student'))
-                elif role == 'aa':
+                elif role == 'approval':
                     return redirect(url_for('views.academic'))
                 
-                elif role in ['hod', 'rector']:
-                    return redirect(url_for('views.approval'))
+                elif role == 'hod':
+                    return redirect(url_for('views.hod'))
+                
+                elif role == 'rector':
+                    return redirect(url_for('views.rector'))
                 
                 elif role == 'lecturer':
                     return redirect(url_for('views.lecturer'))
@@ -49,7 +52,7 @@ def home():
         else:
             flash(result.get('message', 'Sai email hoặc mật khẩu!'), category='error')
 
-    return render_template('home.html', user=current_user)
+    return render_template('home.html', user=None)
 
 
 # Logout route

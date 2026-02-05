@@ -1,34 +1,399 @@
 {% extends "des.html" %}
-{% block title %}Dashboard{% endblock %}
+{% block title %}Student Syllabus{% endblock %}
 {% block content %}
-<h1>STUDENT DASHBOARD</h1>
-<table class="table table-striped">
-    <thead>
-        <tr>
-            <th>ID</th>
-            <th>Họ tên</th>
-            <th>Email</th>
-            <th>Phone</th>
-            <th>Status</th>
-            <th>Faculty ID</th>
-            <th>Created At</th>
-            <th>Updated At</th>
-            <th>Role</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for user in users %}
-        <tr>
-            <td>{{ user.user_id }}</td>
-            <td>{{ user.username }}</td>
-            <td>{{ user.email }}</td>
-            <td>{{ user.phone or 'N/A' }}</td>
-            <td>{{ user.status }}</td>
-            <td>{{ user.faculty_id }}</td>
-            <td>{{ user.created_at }}</td>
-            <td>{{ user.updated_at }}</td>
-            <td>{{ user.role }}</td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
+<style>
+@import url("https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Work+Sans:wght@300;400;500;600&display=swap");
+</style>
+
+<div class="student-portal">
+    <aside class="student-sidebar">
+        <div class="student-brand">
+            <div class="student-brand-mark">UTH</div>
+            <div class="student-brand-text">
+                <div class="student-brand-title">Student Hub</div>
+                <div class="student-brand-sub">Syllabus Explorer</div>
+            </div>
+        </div>
+        <nav class="student-nav">
+            <button class="student-nav-item active">
+                <span class="student-nav-icon"><i class="fa-solid fa-house"></i></span>
+                Home
+            </button>
+            <button class="student-nav-item">
+                <span class="student-nav-icon"><i class="fa-solid fa-book-open"></i></span>
+                My Courses
+            </button>
+            <button class="student-nav-item">
+                <span class="student-nav-icon"><i class="fa-solid fa-wand-magic-sparkles"></i></span>
+                AI Summary
+            </button>
+            <button class="student-nav-item">
+                <span class="student-nav-icon"><i class="fa-solid fa-sitemap"></i></span>
+                Subject Tree
+            </button>
+            <button class="student-nav-item">
+                <span class="student-nav-icon"><i class="fa-solid fa-map"></i></span>
+                Output Map
+            </button>
+        </nav>
+        <div class="student-sidebar-card">
+            <h4>Stay Updated</h4>
+            <p>Follow syllabuses to receive email and in-app notifications.</p>
+            <button class="student-primary-btn">Manage Subscriptions</button>
+        </div>
+        <button class="student-logout">
+            Log out
+            <i class="fa-solid fa-right-from-bracket"></i>
+        </button>
+    </aside>
+
+    <main class="student-main">
+        <header class="student-topbar">
+            <div class="student-topbar-left">
+                <div class="student-chip">Spring 2026</div>
+                <div class="student-update">Updated Feb 5, 2026</div>
+            </div>
+            <div class="student-topbar-right">
+                <button class="student-icon-btn"><i class="fa-regular fa-bell"></i></button>
+                <div class="student-user">
+                    <div class="student-user-avatar">SV</div>
+                    <div>
+                        <div class="student-user-name">Student</div>
+                        <div class="student-user-email">abcde@ut.edu.vn</div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <section class="student-hero">
+            <div class="student-hero-text">
+                <h1>Find Your Course Syllabus</h1>
+                <p>Search by subject name, code, major, or semester. View details, analyze prerequisites, and follow updates.</p>
+            </div>
+            <div class="student-search">
+                <div class="student-search-input">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <input id="searchInput" type="text" placeholder="Search subject name, code, or keyword">
+                </div>
+                <div class="student-filters">
+                    <select id="majorFilter">
+                        <option value="">All majors</option>
+                        <option>Software Engineering</option>
+                        <option>Information Systems</option>
+                        <option>Data Science</option>
+                        <option>Cybersecurity</option>
+                    </select>
+                    <select id="semesterFilter">
+                        <option value="">All semesters</option>
+                        <option value="1">Semester 1</option>
+                        <option value="2">Semester 2</option>
+                        <option value="3">Semester 3</option>
+                        <option value="4">Semester 4</option>
+                        <option value="5">Semester 5</option>
+                        <option value="6">Semester 6</option>
+                    </select>
+                </div>
+            </div>
+        </section>
+
+        <section class="student-section">
+            <div class="student-section-header">
+                <h2>Search Results</h2>
+                <span id="resultCount" class="student-counter">0 subjects</span>
+            </div>
+            <div id="subjectGrid" class="student-grid"></div>
+        </section>
+
+        <section class="student-section">
+            <div class="student-section-header">
+                <h2>Recently Updated Syllabuses</h2>
+            </div>
+            <div class="student-updates">
+                <div class="student-update-card">
+                    <div class="student-update-top"></div>
+                    <div class="student-update-body">
+                        <h3>Python Programming</h3>
+                        <p>2026 Edition · Nguyen Ngoc Tan</p>
+                        <div class="student-meta-row">
+                            <span>25MB</span>
+                            <span>Updated 2h ago</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="student-update-card">
+                    <div class="student-update-top alt"></div>
+                    <div class="student-update-body">
+                        <h3>UI/UX Foundations</h3>
+                        <p>2026 Edition · Le Anh Khoa</p>
+                        <div class="student-meta-row">
+                            <span>18MB</span>
+                            <span>Updated 5h ago</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="student-update-card">
+                    <div class="student-update-top dark"></div>
+                    <div class="student-update-body">
+                        <h3>Data Warehousing</h3>
+                        <p>2026 Edition · Tran Ha Vy</p>
+                        <div class="student-meta-row">
+                            <span>22MB</span>
+                            <span>Updated 1d ago</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="student-section student-detail">
+            <div class="student-section-header">
+                <h2>View Syllabus Detail</h2>
+                <div class="student-detail-actions">
+                    <button id="followBtn" class="student-primary-btn">Follow</button>
+                    <button class="student-ghost-btn">Download PDF</button>
+                </div>
+            </div>
+            <div class="student-detail-card">
+                <div class="student-detail-main">
+                    <div>
+                        <div id="detailCode" class="student-code">SE101</div>
+                        <h3 id="detailName">Software Engineering Fundamentals</h3>
+                        <p id="detailInfo" class="student-detail-info"></p>
+                    </div>
+                    <div class="student-detail-badges" id="detailBadges"></div>
+                </div>
+                <div class="student-detail-grid">
+                    <div class="student-detail-block">
+                        <h4>Overview</h4>
+                        <p id="detailOverview"></p>
+                        <div class="student-assessments" id="detailAssessments"></div>
+                    </div>
+                    <div class="student-detail-block">
+                        <h4>Weekly Topics</h4>
+                        <ul id="detailTopics" class="student-topic-list"></ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="student-section student-visuals">
+            <div class="student-visual-card">
+                <div class="student-visual-header">
+                    <h3>AI Summary</h3>
+                    <button id="summaryBtn" class="student-primary-btn">Generate</button>
+                </div>
+                <p id="summaryText" class="student-visual-text">Generate a concise summary of the selected syllabus.</p>
+            </div>
+            <div class="student-visual-card">
+                <div class="student-visual-header">
+                    <h3>Subject Tree</h3>
+                    <span class="student-visual-note">first → last</span>
+                </div>
+                <div id="treeList" class="student-tree"></div>
+            </div>
+            <div class="student-visual-card">
+                <div class="student-visual-header">
+                    <h3>Output Standard Map</h3>
+                </div>
+                <div id="outcomeMap" class="student-outcome-map"></div>
+            </div>
+        </section>
+    </main>
+</div>
+
+<script>
+const subjects = [
+    {
+        code: "SE101",
+        name: "Software Engineering Fundamentals",
+        major: "Software Engineering",
+        semester: "1",
+        credits: 3,
+        updated: "Jan 20, 2026",
+        overview: "Introduce software life cycle, requirements, and team practices with short labs.",
+        topics: ["Intro to SE & roles", "Requirements & user stories", "UML basics", "Version control workflow", "Testing essentials"],
+        assessments: [{ label: "Midterm", value: "30%" }, { label: "Project", value: "40%" }, { label: "Final", value: "30%" }],
+        outcomes: ["O1: Problem Analysis", "O2: Collaboration", "O3: Testing & QA"],
+        path: ["SE101", "SE102", "SE201", "SE301"]
+    },
+    {
+        code: "SE102",
+        name: "Object-Oriented Programming",
+        major: "Software Engineering",
+        semester: "2",
+        credits: 4,
+        updated: "Feb 2, 2026",
+        overview: "Object modeling, class design, and reusable code patterns with Java.",
+        topics: ["Classes & objects", "Inheritance & polymorphism", "SOLID principles", "Design patterns", "Refactoring"],
+        assessments: [{ label: "Lab", value: "25%" }, { label: "Project", value: "45%" }, { label: "Final", value: "30%" }],
+        outcomes: ["O1: Problem Analysis", "O4: Design Patterns", "O5: Clean Code"],
+        path: ["SE101", "SE102", "SE201", "SE301"]
+    },
+    {
+        code: "DS210",
+        name: "Data Science Tools",
+        major: "Data Science",
+        semester: "3",
+        credits: 3,
+        updated: "Jan 28, 2026",
+        overview: "Python stack for data, visualization, and reproducible notebooks.",
+        topics: ["NumPy fundamentals", "Pandas pipelines", "Data visualization", "APIs & scraping", "Notebook storytelling"],
+        assessments: [{ label: "Quizzes", value: "20%" }, { label: "Project", value: "50%" }, { label: "Final", value: "30%" }],
+        outcomes: ["O1: Problem Analysis", "O6: Data Literacy", "O7: Visualization"],
+        path: ["DS110", "DS210", "DS310", "DS410"]
+    },
+    {
+        code: "IS230",
+        name: "Enterprise Information Systems",
+        major: "Information Systems",
+        semester: "4",
+        credits: 3,
+        updated: "Jan 18, 2026",
+        overview: "Enterprise platforms, ERP processes, and system integration.",
+        topics: ["ERP landscape", "Business process modeling", "Integration patterns", "Data governance", "Case study"],
+        assessments: [{ label: "Case study", value: "35%" }, { label: "Exam", value: "35%" }, { label: "Presentation", value: "30%" }],
+        outcomes: ["O2: Collaboration", "O8: Systems Thinking", "O9: Governance"],
+        path: ["IS110", "IS230", "IS320", "IS410"]
+    },
+    {
+        code: "CY240",
+        name: "Network Security Fundamentals",
+        major: "Cybersecurity",
+        semester: "4",
+        credits: 3,
+        updated: "Feb 1, 2026",
+        overview: "Core network defense, threat modeling, and incident response practice.",
+        topics: ["Network layers & threats", "Firewalls & IDS", "Threat modeling", "Incident response", "Security audits"],
+        assessments: [{ label: "Labs", value: "30%" }, { label: "Final", value: "40%" }, { label: "Project", value: "30%" }],
+        outcomes: ["O10: Security Mindset", "O11: Risk Analysis", "O12: Incident Response"],
+        path: ["CY120", "CY240", "CY330", "CY420"]
+    }
+];
+
+const subjectGrid = document.getElementById("subjectGrid");
+const searchInput = document.getElementById("searchInput");
+const majorFilter = document.getElementById("majorFilter");
+const semesterFilter = document.getElementById("semesterFilter");
+const resultCount = document.getElementById("resultCount");
+
+const detailCode = document.getElementById("detailCode");
+const detailName = document.getElementById("detailName");
+const detailInfo = document.getElementById("detailInfo");
+const detailOverview = document.getElementById("detailOverview");
+const detailTopics = document.getElementById("detailTopics");
+const detailAssessments = document.getElementById("detailAssessments");
+const detailBadges = document.getElementById("detailBadges");
+const summaryBtn = document.getElementById("summaryBtn");
+const summaryText = document.getElementById("summaryText");
+const treeList = document.getElementById("treeList");
+const outcomeMap = document.getElementById("outcomeMap");
+const followBtn = document.getElementById("followBtn");
+
+let activeSubject = subjects[0];
+let followed = new Set();
+
+function renderSubjects(list) {
+    subjectGrid.innerHTML = "";
+    list.forEach((subject) => {
+        const card = document.createElement("article");
+        card.className = "student-card";
+        card.innerHTML = `
+            <div class="student-card-head">
+                <span>${subject.code}</span>
+                <span class="student-card-semester">Semester ${subject.semester}</span>
+            </div>
+            <h3>${subject.name}</h3>
+            <p>${subject.major} · ${subject.credits} credits</p>
+            <div class="student-card-meta">
+                <span>Updated ${subject.updated}</span>
+                <button class="student-ghost-btn student-view-btn">View detail</button>
+            </div>
+        `;
+        card.querySelector(".student-view-btn").addEventListener("click", () => {
+            setActiveSubject(subject);
+            document.querySelector(".student-detail").scrollIntoView({ behavior: "smooth" });
+        });
+        subjectGrid.appendChild(card);
+    });
+    resultCount.textContent = `${list.length} subject${list.length !== 1 ? "s" : ""}`;
+}
+
+function setActiveSubject(subject) {
+    activeSubject = subject;
+    detailCode.textContent = subject.code;
+    detailName.textContent = subject.name;
+    detailInfo.textContent = `${subject.major} · Semester ${subject.semester} · ${subject.credits} credits · Updated ${subject.updated}`;
+    detailOverview.textContent = subject.overview;
+    detailTopics.innerHTML = subject.topics.map((topic) => `<li>${topic}</li>`).join("");
+    detailAssessments.innerHTML = subject.assessments
+        .map((item) => `<span>${item.label}: <strong>${item.value}</strong></span>`)
+        .join("");
+    detailBadges.innerHTML = subject.outcomes
+        .map((outcome) => `<span>${outcome}</span>`)
+        .join("");
+    summaryText.textContent = "Generate a concise summary of the selected syllabus.";
+    renderTree(subject);
+    renderOutcomes(subject);
+    followBtn.textContent = followed.has(subject.code) ? "Following" : "Follow";
+}
+
+function renderTree(subject) {
+    treeList.innerHTML = subject.path
+        .map((code, index) => {
+            const label = index === 0 ? "First" : index === subject.path.length - 1 ? "Last" : "Next";
+            const isActive = code === subject.code ? "active" : "";
+            return `<div class="student-tree-item ${isActive}">
+                <span class="student-tree-label">${label}</span>
+                <span class="student-tree-code">${code}</span>
+            </div>`;
+        })
+        .join("");
+}
+
+function renderOutcomes(subject) {
+    outcomeMap.innerHTML = subject.outcomes
+        .map((outcome, index) => `<div class="student-outcome">
+            <div class="student-outcome-tag">O${index + 1}</div>
+            <div>${outcome}</div>
+        </div>`)
+        .join("");
+}
+
+function filterSubjects() {
+    const query = searchInput.value.toLowerCase().trim();
+    const major = majorFilter.value;
+    const semester = semesterFilter.value;
+    const filtered = subjects.filter((subject) => {
+        const matchesQuery = !query ||
+            subject.name.toLowerCase().includes(query) ||
+            subject.code.toLowerCase().includes(query) ||
+            subject.major.toLowerCase().includes(query);
+        const matchesMajor = !major || subject.major === major;
+        const matchesSemester = !semester || subject.semester === semester;
+        return matchesQuery && matchesMajor && matchesSemester;
+    });
+    renderSubjects(filtered);
+}
+
+searchInput.addEventListener("input", filterSubjects);
+majorFilter.addEventListener("change", filterSubjects);
+semesterFilter.addEventListener("change", filterSubjects);
+
+summaryBtn.addEventListener("click", () => {
+    summaryText.textContent = `${activeSubject.name} focuses on ${activeSubject.overview.toLowerCase()} It emphasizes ${activeSubject.outcomes.join(", ").toLowerCase()}.`;
+});
+
+followBtn.addEventListener("click", () => {
+    if (followed.has(activeSubject.code)) {
+        followed.delete(activeSubject.code);
+        followBtn.textContent = "Follow";
+    } else {
+        followed.add(activeSubject.code);
+        followBtn.textContent = "Following";
+    }
+});
+
+renderSubjects(subjects);
+setActiveSubject(subjects[0]);
+</script>
+{% endblock %}

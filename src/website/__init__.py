@@ -35,7 +35,8 @@ def create_app():
     #print("Supabase connected:", supabase is not None)
 
     from .auth import auth
-    from .views import views
+    from .views import views 
+    from controllers.request_controller import request_bp
 
 #import cac cau truc du lieu tu model
     
@@ -44,6 +45,7 @@ def create_app():
     app.register_blueprint(auth, url_prefix='/')
     app.register_blueprint(views, url_prefix='/')
     app.register_blueprint(ai_bp, url_prefix='/ai')
+    app.register_blueprint(request_bp, url_prefix='/api')
 
 
     @app.context_processor

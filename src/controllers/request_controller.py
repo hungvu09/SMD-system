@@ -42,7 +42,7 @@ def create_request():
 # =======================
 @request_bp.route("/requests", methods=["GET"])
 @auth_required
-@role_required("hod", "aa", "admin")
+@role_required("HOD", "ACADEMIC_AFFAIRS", "admin")
 def list_requests():
     data = request_service.get_all_requests()
     return jsonify(data)
@@ -53,7 +53,7 @@ def list_requests():
 # =======================
 @request_bp.route("/requests/<request_id>/review", methods=["PUT"])
 @auth_required
-@role_required("hod", "aa")
+@role_required("HOD", "ACADEMIC_AFFAIRS")
 def review_request(request_id):
     data = request.get_json()
     new_status = data.get("status")

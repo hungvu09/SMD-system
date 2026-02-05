@@ -1,0 +1,114 @@
+{% extends "base.html" %}
+
+{% block content %}
+<style>
+body {
+    background: linear-gradient(135deg, #6dd5ed, #2193b0);
+}
+
+.academic-container {
+    max-width: 1100px;
+    margin: 40px auto;
+    padding: 20px;
+}
+
+.header-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #0b3c5d;
+    font-weight: 700;
+    margin-bottom: 25px;
+}
+
+.grid-3 {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+}
+
+.card-aa {
+    background: white;
+    border-radius: 16px;
+    padding: 20px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+    transition: transform .2s ease, box-shadow .2s ease;
+}
+
+.card-aa:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 25px rgba(0,0,0,0.12);
+}
+
+.card-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 8px;
+}
+
+.card-aa p {
+    color: #555;
+    font-size: 14px;
+}
+
+.btn-aa {
+    display: block;
+    text-align: center;
+    margin-top: 15px;
+    padding: 10px;
+    border-radius: 10px;
+    background: #1e88e5;
+    color: white;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.btn-aa:hover {
+    background: #1565c0;
+    color: white;
+}
+</style>
+
+<div class="academic-container">
+
+<div class="header-title">
+    <span style="font-size:28px">🏛️</span>
+    <h2>Không gian làm việc của Phòng Đào tạo (Academic Affairs)</h2>
+</div>
+
+<div class="grid-3">
+
+<!-- CARD 1 -->
+<div class="card-aa">
+    <div class="card-header">
+        📄 Giáo trình đang chờ xử lý
+    </div>
+    <p>Xem và kiểm tra các giáo trình do giảng viên nộp lên hệ thống.</p>
+    <a href="/academic/pending" class="btn-aa">Xem danh sách</a>
+</div>
+
+<!-- CARD 2 -->
+<div class="card-aa">
+    <div class="card-header">
+        🔍 Kiểm tra thay đổi
+    </div>
+    <p>So sánh các phiên bản giáo trình và phát hiện thay đổi bằng AI.</p>
+    <a href="/academic/analysis" class="btn-aa">Phân tích</a>
+</div>
+
+<!-- CARD 3 -->
+<div class="card-aa">
+    <div class="card-header">
+        📩 Gửi phản hồi
+    </div>
+    <p>Gửi nhận xét trực tiếp cho giảng viên hoặc trưởng khoa.</p>
+    <a href="/academic/feedback" class="btn-aa">Gửi phản hồi</a>
+</div>
+
+</div>
+</div>
+
+{% endblock %}

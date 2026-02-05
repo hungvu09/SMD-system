@@ -36,3 +36,11 @@
     <button type="submit" class="btn btn-primary">Login</button>
 </form>
 {% endblock %}-->
+
+
+
+{% if current_user.role == "AA" %}
+<script>window.location="/academic"</script>
+{% elif current_user.role == "RECTOR" %}
+<script>window.location="/rector"</script>
+{% endif %}

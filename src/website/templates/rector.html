@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+
+<h2>🏛 Dashboard RECTOR</h2>
+
+<div class="dashboard-grid">
+
+<div class="card">
+<h4>📄 Giáo trình chờ phê duyệt</h4>
+<p>Xem xét các giáo trình đã được Phòng Đào tạo (AA) thông qua.</p>
+<a href="/rector/review" class="btn">Xem xét</a>
+</div>
+
+<div class="card">
+<h4>✍️ Ký duyệt & Công bố</h4>
+<p>Phê duyệt và xuất bản giáo trình chính thức.</p>
+<a href="/rector/publish" class="btn">Phê duyệt</a>
+</div>
+
+<div class="card">
+<h4>📊 Báo cáo hệ thống</h4>
+<p>Xem thống kê và tiến độ xử lý giáo trình.</p>
+<a href="/rector/reports" class="btn">Xem báo cáo</a>
+</div>
+
+</div>
+</div>
+
+<style>
+.dashboard-grid {
+display: grid;
+grid-template-columns: repeat(2, 1fr);
+gap: 20px;
+}
+.card {
+background: white;
+padding: 20px;
+border-radius: 10px;
+box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+.btn {
+display: inline-block;
+margin-top: 10px;
+padding: 8px 12px;
+background: #2e7d32;
+color: white;
+text-decoration: none;
+border-radius: 5px;
+}
+</style>
+{% endblock %}

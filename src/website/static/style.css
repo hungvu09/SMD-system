@@ -115,3 +115,85 @@
         padding: 20px;
         border-radius: 10px;
     }
+
+body {
+        background-color: #77e2f8; /* Màu xanh da trời nhạt */
+        
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+    }
+
+/* Style chung cho nút hình con nhộng */
+.btn-capsule {
+    border: none;
+    padding: 8px 20px;
+    border-radius: 50px; /* Đây là dòng tạo hình con nhộng */
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px; /* Khoảng cách giữa icon và chữ */
+    transition: all 0.3s ease;
+    text-decoration: none;
+    font-size: 14px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+/* Màu đỏ cho trạng thái Đang hoạt động -> Bấm để Khóa */
+.btn-lock-capsule {
+   background-color: #e74c3c;
+}
+
+/* Màu xanh cho trạng thái Đang bị khóa -> Bấm để Mở */
+.btn-unlock-capsule {
+    background-color: #2ecc71;
+}
+
+/* Hiệu ứng khi di chuột vào */
+.btn-capsule:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+    filter: brightness(1.1);
+}
+
+.notification-container-right {
+    position: fixed; /* Cố định vị trí */
+    top: 15px;
+    right: 15px;
+    z-index: 9999;
+}
+
+.notif-bell-btn {
+    background: #ffffff;
+    border: 1px solid #ddd;
+    border-radius: 50%;
+    width: 45px;
+    height: 45px;
+    cursor: pointer;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.notif-content-dropdown {
+    display: none; /* Mặc định ẩn */
+    position: absolute;
+    top: 55px;
+    right: 0;
+    width: 300px;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    border: 1px solid #eee;
+}
+
+/* Khi có class .active thì mới hiện */
+.notif-content-dropdown.active {
+    display: block !important;
+}
+.notif-header { padding: 10px; border-bottom: 1px solid #eee; font-weight: bold; background: #f8f9fa; }
+.notif-item { padding: 12px; display: block; text-decoration: none; color: #333; border-bottom: 1px solid #f0f0f0; }
+.notif-item:hover { background: #f1f1f1; }
+.notif-item.unread { background: #e7f3ff; }
+.notif-footer { text-align: center; padding: 10px; border-top: 1px solid #eee; }

@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% block content %}
+<style>
+body {
+    background: linear-gradient(135deg, #6dd5ed, #2193b0);
+}
+.box {
+    background: white;
+    border-radius: 16px;
+    padding: 20px;
+    max-width: 900px;
+    margin: 40px auto;
+}
+.result {
+    background: #f5f7fa;
+    padding: 15px;
+    border-radius: 10px;
+}
+</style>
+
+<div class="box">
+<h2>🔍 Phân tích thay đổi giáo trình (AI)</h2>
+
+<form method="POST" class="mt-3">
+<label>Chọn phiên bản cũ:</label>
+<select name="old_id" class="form-control mb-2">
+{% for s in syllabi %}
+<option value="{{ s.syl_id }}">{{ s.title }} — v{{ s.current_version_id }}</option>
+{% endfor %}
+</select>
+
+<label>Chọn phiên bản mới:</label>
+<select name="new_id" class="form-control mb-3">
+{% for s in syllabi %}
+<option value="{{ s.syl_id }}">{{ s.title }} — v{{ s.current_version_id }}</option>
+{% endfor %}
+</select>
+
+<button class="btn btn-primary">Chạy phân tích AI</button>
+</form>
+
+{% if result %}
+<h4 class="mt-4">Kết quả phân tích:</h4>
+<div class="result">
+<pre>{{ result }}</pre>
+</div>
+{% endif %}
+</div>
+{% endblock %}

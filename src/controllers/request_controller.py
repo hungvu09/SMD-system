@@ -25,7 +25,8 @@ def create_request():
     result = request_service.create_request(
         title=title,
         content=content,
-        user_id=current_user.user_id
+        user_id=current_user.id
+
     )
 
     if result["success"]:
@@ -64,7 +65,7 @@ def review_request(request_id):
     result = request_service.review_request(
         request_id=request_id,
         new_status=new_status,
-        reviewer_id=current_user.user_id
+        reviewer_id=current_user.id
     )
 
     if result["success"]:

@@ -6,8 +6,9 @@ flask-wtf
 python-dotenv==1.0.1
 supabase==2.8.0
 sqlalchemy==2.0.35
-psycopg2-binary==2.9.9
+psycopg2-binary==2.9.11
 pyjwt==2.9.0
 werkzeug==3.0.4
 alembic==1.13.3
 requests==2.32.3
+ollama==0.6.1
